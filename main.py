@@ -1,8 +1,8 @@
 import tkinter as tk
-import random
+from moviepy.editor import VideoFileClip, AudioFileClip, concatenate_videoclips
 from pytube import YouTube
-vStreams = YouTube('https://www.youtube.com/watch?v=eYZMxMQE2Uw').streams.filter(adaptive=True).filter(type="video")
-aStreams = YouTube('https://www.youtube.com/watch?v=eYZMxMQE2Uw').streams.filter(adaptive=True).filter(type="audio")
+vStreams = YouTube('https://www.youtube.com/watch?v=eYZMxMQE2Uw', use_oauth=True, allow_oauth_cache=True).streams.filter(adaptive=True).filter(type="video")
+aStreams = YouTube('https://www.youtube.com/watch?v=eYZMxMQE2Uw', use_oauth=True, allow_oauth_cache=True).streams.filter(adaptive=True).filter(type="audio")
 subtypeChoice = input("mp4 or webm ????\n")[:1].lower()
 if subtypeChoice == "m":
     vStreams = vStreams.filter(subtype="mp4")
@@ -31,8 +31,15 @@ for x in aStreams:
     print(str(aStreams.index(x) + 1) + ". " + str(x.abr))
     
 aStream = aStreams[int(input()) - 1]
-    
-# vStreams[0].download(output_path="C:/Users/tschmidt8320/Desktop/dcode/youtubedownloader/mdownloads")
+
+vTitle = vStream.title
+
+vStream.download(output_path="C:/Users/tschmidt8320/Desktop/dcode/youtubedownloader/downloads", filename="temp.mp4")
+aStream.download(output_path="C:/Users/tschmidt8320/Desktop/dcode/youtubedownloader/downloads", filename="temp.mp3")
+
+vClip = VideoFileClip("C:/Users/tschmidt8320/Desktop/dcode/youtubedownloader/downloads/temp.mp4")
+vClip = vClip.set_audio(AudioFileClip("C:/Users/tschmidt8320/Desktop/dcode/youtubedownloader/downloads/temp.mp3"))
+vClip.write_videofile("C:/Users/tschmidt8320/Desktop/dcode/youtubedownloader/downloads/" + vTitle + ".mp4")
 
 """
 for x in aStreams:
